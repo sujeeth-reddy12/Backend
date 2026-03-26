@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
+@CrossOrigin(originPatterns = {"http://localhost:3000", "http://localhost:3001", "https://*.vercel.app"})
 @RequestMapping("/api/admin")
 public class AdminController {
 
