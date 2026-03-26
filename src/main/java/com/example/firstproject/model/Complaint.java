@@ -33,7 +33,7 @@ public class Complaint {
     @Column(nullable = false)
     private ComplaintStatus status;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Long userId;
 
     private Long staffId;

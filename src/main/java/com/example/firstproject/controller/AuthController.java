@@ -7,6 +7,7 @@ import com.example.firstproject.model.User;
 import com.example.firstproject.repository.UserRepository;
 import com.example.firstproject.security.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,25 +36,40 @@ public class AuthController {
             return ResponseEntity.badRequest().body("name, email, password, and role are required");
         }
 
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+        if (request.getName().isBlank() || request.getEmail().isBlank() || request.getPassword().isBlank()) {
+            return ResponseEntity.badRequest().body("name, email, and password must not be blank");
+        }
+
+        String normalizedEmail = request.getEmail().trim().toLowerCase();
+
+        if (userRepository.findByEmail(normalizedEmail).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists");
         }
 
         User user = new User();
         user.setName(request.getName());
-        user.setEmail(request.getEmail());
+        user.setEmail(normalizedEmail);
         user.setPassword(request.getPassword());
         user.setRole(request.getRole());
 
-        User savedUser = userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-            new AuthResponse(savedUser.getId(), savedUser.getName(), savedUser.getEmail(), savedUser.getRole(), "Registration successful", "")
-        );
+        try {
+            User savedUser = userRepository.save(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(
+                new AuthResponse(savedUser.getId(), savedUser.getName(), savedUser.getEmail(), savedUser.getRole(), "Registration successful", "")
+            );
+        } catch (DataIntegrityViolationException ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists");
+        }
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
-        User user = userRepository.findByEmail(request.getEmail()).orElse(null);
+        if (request.getEmail() == null || request.getPassword() == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
+
+        String normalizedEmail = request.getEmail().trim().toLowerCase();
+        User user = userRepository.findByEmail(normalizedEmail).orElse(null);
         if (user == null || !user.getPassword().equals(request.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }

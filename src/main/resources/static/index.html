@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firstproject API</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f7fb;
+      color: #1a1a1a;
+    }
+    .wrap {
+      max-width: 760px;
+      margin: 8vh auto;
+      background: #ffffff;
+      border: 1px solid #d9e2ef;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    }
+    h1 {
+      margin-top: 0;
+      color: #0d3b66;
+    }
+    code {
+      background: #edf2f7;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+    ul {
+      line-height: 1.8;
+      padding-left: 18px;
+    }
+    a {
+      color: #0056b3;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Firstproject backend is running</h1>
+    <p>This server provides API endpoints. The root URL <code>/</code> now serves this page instead of a Whitelabel 404.</p>
+    <p>Useful endpoints:</p>
+    <ul>
+      <li><a href="/api/auth/me">/api/auth/me</a> (requires token)</li>
+      <li><code>/api/auth/register</code> (POST)</li>
+      <li><code>/api/auth/login</code> (POST)</li>
+      <li><code>/api/complaints/my</code> (GET, requires USER token)</li>
+    </ul>
+  </div>
+</body>
+</html>
